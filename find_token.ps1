@@ -2,7 +2,12 @@
 # 1. Create a fake file that contains a hard-coded fake token
 # ----------------------------------------------
 
-$fakePath = "$env:TEMP\faketoken.txt"
+# Directory for our safe demo files
+$demoDir = Join-Path $HOME "pwsh_demo"
+New-Item -ItemType Directory -Force -Path $demoDir | Out-Null
+
+# 1. Create a fake file that contains a hard-coded fake token
+$fakePath = Join-Path $demoDir "faketoken.txt"
 
 $fakeToken = "FAKE_TOKEN_1234567890.ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -15,6 +20,7 @@ Note: This is a fake educational token, not a real one.
 Write-Output "Created fake token file at:"
 Write-Output "  $fakePath"
 Write-Output ""
+
 
 # ----------------------------------------------
 # 2. Define a regex pattern that LOOKS LIKE a Discord token

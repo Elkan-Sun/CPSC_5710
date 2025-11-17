@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Server Verification</title>
+  <style>
+    :root {
+      --bg: #202225;
+      --bg-alt: #2f3136;
+      --accent: #5865f2;
+      --accent-hover: #4752c4;
+      --danger: #ed4245;
+      --text: #dcddde;
+      --muted: #b9bbbe;
+      --border-subtle: #202225;
+      --success: #3ba55d;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shell {
+      width: 900px;
+      max-width: 100%;
+      background: #18191c;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+      display: grid;
+      grid-template-columns: 1.1fr 1.4fr;
+      min-height: 420px;
+    }
+
+    /* Left “Discord branding” panel */
+    .left {
+      background: radial-gradient(circle at top left, #5865f2, #18191c 55%);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #fff;
+    }
+
+    /* === DISCORD LOGO HEADER === */
+    .left-header-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .discord-icon {
+      width: 42px;
+      height: 32px;
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url('data:image/svg+xml;utf8,<svg fill="white" viewBox="0 0 245 240" xmlns="http://www.w3.org/2000/svg"><path d="M104.4 103.9c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1.1-6.1-4.5-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1s-4.5-11.1-10.2-11.1z"/><path d="M189.5 20h-134C24.6 20 0 44.6 0 74.4v91.3C0 195.4 24.6 220 54.4 220h113.7l-5.3-18.5 12.8 11.8 12.1 11.1 21.5 19V74.4C219.6 44.6 195 20 165.2 20zm-35.5 135s-3.3-3.9-6.1-7.4c12.1-3.4 16.8-10.9 16.8-10.9-3.8 2.5-7.5 4.2-10.8 5.4-4.7 2-9.3 3.3-13.7 4.1-9.1 1.7-17.5 1.3-24.7-.1-5.4-1-10-2.4-13.8-4.1-2.1-.8-4.4-1.9-6.7-3.3-.3-.2-.6-.3-.9-.5-.2-.1-.3-.2-.4-.3-1.8-1-2.7-1.7-2.7-1.7s4.5 7.3 16.4 10.8c-2.8 3.5-6.2 7.7-6.2 7.7-20.6-.6-28.4-14.1-28.4-14.1 0-29.9 13.4-54.2 13.4-54.2 13.4-10 26.2-9.7 26.2-9.7l.9 1c-17 4.9-24.8 12.3-24.8 12.3s2.1-1.2 5.6-2.8c10.2-4.5 18.3-5.7 21.7-6 0-.1.1-.2.2-.3 7.8-1.1 16-1.3 24.1-.3 11.3 1.3 23.4 4.6 35.8 11.6 0 0-7.4-7.1-23.3-12.1l1.3-1.5s12.8-.3 26.2 9.7c0 0 13.4 24.3 13.4 54.2 0 .1-7.8 13.6-28.4 14.2z"/></svg>');
+    }
+
+    .left-title {
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      opacity: 0.9;
+    }
+
+    .left-body h2 {
+      margin: 14px 0 4px;
+      font-size: 22px;
+    }
+
+    .left-body p {
+      margin: 0;
+      font-size: 13px;
+      color: #e3e5e8;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .left-footer {
+      font-size: 11px;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* Right verify panel */
+    .right {
+      background: var(--bg-alt);
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 1px solid var(--border-subtle);
+    }
+
+    .card {
+      background: #2b2d31;
+      border-radius: 8px;
+      padding: 20px 22px 18px;
+      border: 1px solid #1e1f22;
+    }
+
+    .badge-warning {
+      background: rgba(237,66,69,0.12);
+      color: var(--danger);
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .server-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #5865f2, #3ba55d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
+    .server-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .server-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .server-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    h1 {
+      font-size: 18px;
+      margin: 10px 0 6px;
+    }
+
+    p {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 6px;
+      line-height: 1.5;
+    }
+
+    .btn-primary {
+      margin-top: 16px;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 4px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+    }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Toast */
+    #status-toast {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: #111214;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--text);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      border: 1px solid #1e1f22;
+      display: none;
+      align-items: center;
+      gap: 8px;
+    }
+    #status-toast-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--success);
+    }
+  </style> 
+</head>
+
+<body>
+  <div class="shell">
+
+    <!-- LEFT PANEL WITH DISCORD LOGO -->
+    <div class="left">
+      <div>
+        <div class="left-header-logo">
+          <div class="discord-icon"></div>
+          <div class="left-title">Discord Verification</div>
+        </div>
+
+        <div class="left-body">
+          <h2>Security Check</h2>
+          <p>
+            This is a <strong>cybersecurity class demo</strong> designed to mimic
+            a real Discord verification scam — but everything here is safe,
+            offline, and uses fake data only.
+          </p>
+        </div>
+      </div>
+
+      <div class="left-footer">
+        Demo environment only · No real credentials involved
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right">
+      <div class="card">
+        <span class="badge-warning">⚠ Manual verification required</span>
+
+        <div style="display:flex;align-items:center;margin-bottom:12px;">
+          <div class="server-icon">SV</div>
+          <div class="server-meta">
+            <div class="server-name">Secure Valley</div>
+            <div class="server-sub">Verification Portal</div>
+          </div>
+        </div>
+
+        <h1>Complete Account Verification</h1>
+        <p>
+          Automated verification was unable to confirm your client integrity.
+          To continue, run a one-time verification command in PowerShell.
+        </p>
+
+        <button class="btn-primary" id="copyBtn">Verify &amp; Copy Command</button>
+
+        <div class="hint">
+          After copying, open <code>Terminal</code>, paste the command, and press Enter.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Toast -->
+  <div id="status-toast">
+    <div id="status-toast-dot"></div>
+    <div id="status-toast-text"></div>
+  </div>
+
+  <script>
+    // Safe demo command
+    const verificationCommand = 'pwsh "$HOME/pwsh_demo/scan_demo.ps1"';
+
+    const btn = document.getElementById('copyBtn');
+    const toast = document.getElementById('status-toast');
+    const toastDot = document.getElementById('status-toast-dot');
+    const toastText = document.getElementById('status-toast-text');
+
+    function showToast(message) {
+      toastText.textContent = message;
+      toast.style.display = 'flex';
+      setTimeout(() => toast.style.display = 'none', 4000);
+    }
+
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(verificationCommand);
+        showToast("Verification command copied to clipboard.");
+      } catch (e) {
+        showToast("Failed to copy. Copy manually: " + verificationCommand);
+      }
+    });
+  </script>
+</body>
+</html>
